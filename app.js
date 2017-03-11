@@ -3,7 +3,7 @@ const xmlToJSon = require('xml2js');
 const elasticsearch = require('elasticsearch');
 const uuidV4 = require('uuid/v4');
 const uniStudioWaitURL = 'http://www.universalstudioshollywood.com/waittimes/?type=all&site=USH';
-const interval = 900000; // in millisecond 1000 * 60 * 15 = 15 min.
+const interval = 54000000; // in millisecond 1000 * 60 * 60 * 15 = 15 min.
 const indexName = 'cs499-unistu';
 
 const client = new elasticsearch.Client({
