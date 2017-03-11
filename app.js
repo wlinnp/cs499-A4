@@ -3,11 +3,11 @@ const xmlToJSon = require('xml2js');
 const elasticsearch = require('elasticsearch');
 const uuidV4 = require('uuid/v4');
 const uniStudioWaitURL = 'http://www.universalstudioshollywood.com/waittimes/?type=all&site=USH';
-const interval = 54000000; // in millisecond 1000 * 60 * 60 * 15 = 15 min.
+const interval = 1800000; // in millisecond 1000 * 60 * 30 = 30 min.
 const indexName = 'cs499-unistu';
 
 const client = new elasticsearch.Client({
-    host: 'https://search-cs499-test-u7rful5wfi3xx3gmneoeuer3qm.us-west-2.es.amazonaws.com/',
+    host: 'https://search-cs499-a4-y2jp25rkziu7u6clyfzsrwxbvi.us-west-2.es.amazonaws.com/',
     log: 'info'
 });
 
@@ -72,7 +72,7 @@ var getWaitTimes = function (json) {
         if (eachWaitTime.match(validRecordShortWait)) {
             allTimes.push({
                 'title': json[i].title[0],
-                'wait_time': eachWaitTime.replace(' min', '').replace('"', '').trim(),
+                'wait_time': parseInt(eachWaitTime.replace(' min', '').replace('"', '').trim()),
                 'timestamp': dateNow
             });
         }
@@ -106,6 +106,9 @@ var sendToElastic = function (data) {
  */
 var timeout = function () {
     setInterval(function () {
+        console.log('=======================');
+        console.log(new Date().toISOString());
+        console.log('=======================');
         getXmlWaitTime(uniStudioWaitURL);
     }, interval)
 };
@@ -117,5 +120,5 @@ timeout();
  * Deleting index from AWS-ElasticSearch
  * curl -XDELETE 'https://<end-point>/<index-name>'
  * example:
- * curl -XDELETE 'https://search-cs499-test-u7rful5wfi3xx3gmneoeuer3qm.u.com/cs499-unistu'
+ * curl -XDELETE 'https://search-cs499-test-u7rful5wfi3xx3gmneoeuer3qm.us-west-2.es.amazonaws.com/cs499-unistu'
  */
